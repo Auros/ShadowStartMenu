@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns:local="clr-namespace:ShadowStartMenu"
+        ui:WindowHelper.UseModernWindowStyle="True"
         mc:Ignorable="d"
-        Title="Debug Log" Height="450" Width="200">
-    <Grid>
+        Title="Debug Log" Height="450" Width="300">
+    <Grid Margin="10">
         <ItemsControl Name="LogTable">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>

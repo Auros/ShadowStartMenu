@@ -14,6 +14,8 @@ namespace ShadowStartMenu
         {
             _logger = logger;
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            _logger.LogInformation("Initializing Window");
         }
     }
 }
