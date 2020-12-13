@@ -4,5 +4,6 @@
     {
         string Name { get; }
         string Path { get; }
+        string? ShortcutPath { get; set; }
     }
 }

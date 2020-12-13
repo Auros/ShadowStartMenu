@@ -3,6 +3,7 @@ using Serilog;
 using System.IO;
 using Serilog.Core;
 using Serilog.Events;
+using ShadowStartMenu.Menu;
 using System.Collections.Generic;
 using Serilog.Sinks.SystemConsole.Themes;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,12 +14,12 @@ namespace ShadowStartMenu
     {
         public const string LOG_OUTPUT_FORMAT = "[{Timestamp:HH:mm:ss} | {Level:u3}] {LooseSource} {Message:lj}{NewLine}{Exception}";
 
-        public void Configure(IServiceCollection services)
+        public static void Configure(IServiceCollection services)
         {
-            
+            services.AddSingleton<IMenuSource, UmbraMenuSource>();
         }
 
-        public void Logging(string contentRoot, IServiceProvider provider)
+        public static void Logging(string contentRoot, IServiceProvider provider)
         {
             Serilog.Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
