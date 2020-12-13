@@ -1,9 +1,11 @@
 ﻿using Serilog.Core;
 using System.Windows;
 using Serilog.Extensions.Logging;
+using Serilog.Extensions.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace ShadowStartMenu
 {
@@ -19,8 +21,10 @@ namespace ShadowStartMenu
             IHostBuilder setup = CreateHostBuilder(e.Args);
             IHost host = setup.Build();
 
+            Log log = (host.Services.GetService(typeof(Log)) as Log)!;
             Main main = (host.Services.GetService(typeof(Main)) as Main)!;
             main.Show();
+            log.Show();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args)
@@ -29,11 +33,21 @@ namespace ShadowStartMenu
             IHostBuilder builder = Host.CreateDefaultBuilder(args);
             builder.ConfigureServices((env, services) =>
             {
+                services.AddTransient<Log>();
                 services.AddTransient<Main>();
                 initializer.Configure(services);
-                Logger logger = initializer.Logging(env.HostingEnvironment.ContentRootPath);
-                services.AddSingleton<ILoggerFactory>(sp => new SerilogLoggerFactory(logger, true));
-                logger.Information("Initializing Shadow Start Menu");
+                initializer.Logging(env.HostingEnvironment.ContentRootPath);
+                services.AddSingleton<LoggerProviderCollection>();
+                services.AddSingleton<ILoggerFactory>(sp =>
+                {
+                    LoggerProviderCollection loggerProviderCollection = sp.GetRequiredService<LoggerProviderCollection>();
+                    SerilogLoggerFactory serilogLoggerFactory = new SerilogLoggerFactory(dispose: true, providerCollection: loggerProviderCollection);
+                    foreach (var provider in sp.GetServices<ILoggerProvider>())
+                    {
+                        serilogLoggerFactory.AddProvider(provider);
+                    }
+                    return serilogLoggerFactory;
+                });
             });
             return builder;
         }

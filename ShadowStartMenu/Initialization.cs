@@ -17,9 +17,9 @@ namespace ShadowStartMenu
             
         }
 
-        public Logger Logging(string contentRoot)
+        public void Logging(string contentRoot)
         {
-            return new LoggerConfiguration()
+            Serilog.Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
