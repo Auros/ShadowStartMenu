@@ -22,6 +22,8 @@ namespace ShadowStartMenu
             Main main = (host.Services.GetService(typeof(Main)) as Main)!;
             main.Show();
             log.Show();
+
+            main.Focus();
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args)
