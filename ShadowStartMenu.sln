@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowStartMenu", "ShadowStartMenu\ShadowStartMenu.csproj", "{AEFA0D46-92C0-4327-987D-8CBA5EC6DB1F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEFA0D46-92C0-4327-987D-8CBA5EC6DB1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFA0D46-92C0-4327-987D-8CBA5EC6DB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFA0D46-92C0-4327-987D-8CBA5EC6DB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFA0D46-92C0-4327-987D-8CBA5EC6DB1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CB8E0DB3-EAB9-45B8-BA1B-B41601E8394D}
+	EndGlobalSection
+EndGlobal
