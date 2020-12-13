@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using Serilog.Core;
 using System.Windows;
+using Serilog.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ShadowStartMenu
 {
@@ -28,6 +31,9 @@ namespace ShadowStartMenu
             {
                 services.AddTransient<Main>();
                 initializer.Configure(services);
+                Logger logger = initializer.Logging(env.HostingEnvironment.ContentRootPath);
+                services.AddSingleton<ILoggerFactory>(sp => new SerilogLoggerFactory(logger, true));
+                logger.Information("Initializing Shadow Start Menu");
             });
             return builder;
         }
