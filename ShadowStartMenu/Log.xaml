@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShadowStartMenu"
         mc:Ignorable="d"
-        Title="Log" Height="450" Width="800">
+        Title="Debug Log" Height="450" Width="200">
     <Grid>
-        
+        <ItemsControl Name="LogTable">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Log}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>

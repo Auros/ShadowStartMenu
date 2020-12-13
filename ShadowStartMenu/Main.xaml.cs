@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Microsoft.Extensions.Logging;
 
 namespace ShadowStartMenu
 {
@@ -7,8 +8,11 @@ namespace ShadowStartMenu
     /// </summary>
     public partial class Main : Window
     {
-        public Main()
+        private readonly ILogger<Main> _logger;
+
+        public Main(ILogger<Main> logger)
         {
+            _logger = logger;
             InitializeComponent();
         }
     }

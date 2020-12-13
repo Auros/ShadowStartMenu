@@ -1,11 +1,8 @@
-﻿using Serilog.Core;
-using System.Windows;
+﻿using System.Windows;
 using Serilog.Extensions.Logging;
-using Serilog.Extensions.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 
 namespace ShadowStartMenu
 {
@@ -33,13 +30,13 @@ namespace ShadowStartMenu
             IHostBuilder builder = Host.CreateDefaultBuilder(args);
             builder.ConfigureServices((env, services) =>
             {
-                services.AddTransient<Log>();
+                services.AddSingleton<Log>();
                 services.AddTransient<Main>();
                 initializer.Configure(services);
-                initializer.Logging(env.HostingEnvironment.ContentRootPath);
                 services.AddSingleton<LoggerProviderCollection>();
                 services.AddSingleton<ILoggerFactory>(sp =>
                 {
+                    initializer.Logging(env.HostingEnvironment.ContentRootPath, sp);
                     LoggerProviderCollection loggerProviderCollection = sp.GetRequiredService<LoggerProviderCollection>();
                     SerilogLoggerFactory serilogLoggerFactory = new SerilogLoggerFactory(dispose: true, providerCollection: loggerProviderCollection);
                     foreach (var provider in sp.GetServices<ILoggerProvider>())

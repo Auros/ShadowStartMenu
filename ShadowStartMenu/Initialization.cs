@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using System;
+using Serilog;
 using System.IO;
 using Serilog.Core;
 using Serilog.Events;
@@ -17,7 +18,7 @@ namespace ShadowStartMenu
             
         }
 
-        public void Logging(string contentRoot)
+        public void Logging(string contentRoot, IServiceProvider provider)
         {
             Serilog.Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -29,6 +30,7 @@ namespace ShadowStartMenu
                     rollingInterval: RollingInterval.Day,
                     outputTemplate: LOG_OUTPUT_FORMAT,
                     rollOnFileSizeLimit: true)
+                .WriteTo.Sink(provider.GetRequiredService<Log>())
                 .CreateLogger();
         }
 
