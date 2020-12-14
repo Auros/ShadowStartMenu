@@ -38,6 +38,8 @@ namespace ShadowStartMenu.Menu
 
         public void Add(IApp app, ShortcutType type, params string[] subRoots)
         {
+            _logger.LogDebug($"Creating new shortcut for {app.Name}.");
+
             _apps.Add(app);
             if (subRoots == null)
             {
@@ -46,10 +48,14 @@ namespace ShadowStartMenu.Menu
             string path = Path.Combine(_startMenuPath, Path.Combine(subRoots), $"{app.Name}.lnk");
             CreateShortcut(path, app.Path);
             app.ShortcutPath = path;
+
+            _logger.LogDebug($"Created new shortcut at {app.ShortcutPath}.");
         }
 
         public void Remove(IApp app)
         {
+            _logger.LogDebug($"Removing shortcut at {app.ShortcutPath}.");
+
             _apps.Remove(app);
             if (File.Exists(app.ShortcutPath))
             {
@@ -58,6 +64,11 @@ namespace ShadowStartMenu.Menu
             }
         }
 
+        /// <summary>
+        /// Creates a file shortcut.
+        /// </summary>
+        /// <param name="path">The path to save it to.</param>
+        /// <param name="originalExe">The original target.</param>
         private static void CreateShortcut(string path, string originalExe)
         {
             WshShell shell = new WshShell();
@@ -67,6 +78,12 @@ namespace ShadowStartMenu.Menu
             shortcut.Save();
         }
 
+        /// <summary>
+        /// Gets every file in a directory based on an extensions.
+        /// </summary>
+        /// <param name="directory">The directory.</param>
+        /// <param name="extensions">The extension name (no period).</param>
+        /// <returns></returns>
         private static FileInfo[] AllFiles(string directory, params string[] extensions)
         {
             List<FileInfo> files = new List<FileInfo>();
@@ -84,6 +101,11 @@ namespace ShadowStartMenu.Menu
             return files.ToArray();
         }
 
+        /// <summary>
+        /// Gets the target [application] behind a shortcut.
+        /// </summary>
+        /// <param name="shortcutFilename">The shortcut path.</param>
+        /// <returns></returns>
         private static string GetShortcutTargetFile(string shortcutFilename)
         {
             WshShell shell = new WshShell();
