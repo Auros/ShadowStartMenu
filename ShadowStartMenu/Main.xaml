@@ -15,15 +15,17 @@
             </Grid>
         </DataTemplate>
     </Window.Resources>
-    <Grid Margin="15">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <TextBlock Name="TitleText" Style="{StaticResource HeaderTextBlockStyle}" Text="..." Margin="10" />
-            <Button Name="DeleteButton" Content="Remove" Style="{StaticResource AccentButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" FontSize="22" Visibility="Hidden" Click="DeleteButton_Click" />
+    <Grid>
+        <Grid Name="MainGrid" Margin="15" AllowDrop="True" Drop="Grid_Drop" DragEnter="Grid_DragEnter" DragLeave="Grid_DragLeave" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <TextBlock Name="TitleText" Style="{StaticResource HeaderTextBlockStyle}" Text="..." Margin="10" />
+                <Button Name="DeleteButton" Content="Remove" Style="{StaticResource AccentButtonStyle}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" FontSize="22" Visibility="Hidden" Click="DeleteButton_Click" />
+            </Grid>
+            <ui:GridView x:Name="AppGridView" ItemTemplate="{StaticResource AppTemplate}" SelectionChanged="AppGridView_SelectionChanged" Grid.Row="1" />
         </Grid>
-        <ui:GridView x:Name="AppGridView" ItemTemplate="{StaticResource AppTemplate}" SelectionChanged="AppGridView_SelectionChanged" Grid.Row="1" />
     </Grid>
 </Window>

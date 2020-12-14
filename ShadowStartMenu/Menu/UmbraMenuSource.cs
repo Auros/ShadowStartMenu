@@ -18,7 +18,7 @@ namespace ShadowStartMenu.Menu
         public UmbraMenuSource(ILogger<UmbraMenuSource> logger)
         {
             _logger = logger;
-            _startMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
+            _startMenuPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), "Programs");
 
             foreach (var file in AllFiles(_startMenuPath, "lnk"))
             {
@@ -45,9 +45,10 @@ namespace ShadowStartMenu.Menu
             {
                 subRoots = Array.Empty<string>();
             }
-            string path = Path.Combine(_startMenuPath, Path.Combine(subRoots), $"{app.Name}.lnk");
-            CreateShortcut(path, app.Path);
-            app.ShortcutPath = path;
+            string path = Path.Combine(_startMenuPath, Path.Combine(subRoots));
+            Directory.CreateDirectory(path);
+            CreateShortcut(Path.Combine(path, $"{app.Name}.lnk"), app.Path);
+            app.ShortcutPath = Path.Combine(path, $"{app.Name}.lnk");
 
             _logger.LogDebug($"Created new shortcut at {app.ShortcutPath}.");
         }

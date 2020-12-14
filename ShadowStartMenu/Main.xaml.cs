@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Media;
 using ShadowStartMenu.Menu;
 using DIcon = System.Drawing.Icon;
@@ -71,6 +72,50 @@ namespace ShadowStartMenu
             }
         }
 
+        private void Grid_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                MainGrid.Opacity = 1f;
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                AppCell? cell = null;
+                IApp[] newApps = new IApp[files.Length];
+                for (int i = 0; i < newApps.Length; i++)
+                {
+                    FileInfo fileInfo = new FileInfo(files[i]);
+                    var app = new UmbraMenuSource.App
+                    {
+                        Name = Path.GetFileNameWithoutExtension(fileInfo.Name),
+                        Path = fileInfo.FullName
+                    };
+                    newApps[i] = app;
+                    _menuSource.Add(app, ShortcutType.File, nameof(ShadowStartMenu));
+                    cell = new AppCell(app, IconFromFilePath(app.Path));
+                    _cells.Add(cell);
+                }
+                if (cell != null)
+                {
+                    AppGridView.SelectedValue = cell;
+                }
+            }
+        }
+
+        private void Grid_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                MainGrid.Opacity = 0.1f;
+            }
+        }
+
+        private void Grid_DragLeave(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                MainGrid.Opacity = 1f;
+            }
+        }
         private record AppCell(IApp App, ImageSource Icon);
     }
 }
