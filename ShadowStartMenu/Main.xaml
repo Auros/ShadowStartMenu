@@ -7,8 +7,20 @@
         xmlns:local="clr-namespace:ShadowStartMenu"
         ui:WindowHelper.UseModernWindowStyle="True"
         mc:Ignorable="d"
-        Title="Main" Height="450" Width="800">
-    <Grid>
-        
+        Title="Main" Height="550" Width="1000">
+    <Window.Resources>
+        <DataTemplate x:Key="AppTemplate">
+            <Grid Margin="15">
+                <Image x:Name="AppIcon" Source="{Binding Icon}" Width="50" Height="50" />
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Name="TitleText" Style="{StaticResource HeaderTextBlockStyle}" Text="" Grid.Row="0" />
+        <ui:GridView x:Name="AppGridView" ItemTemplate="{StaticResource AppTemplate}" SelectionChanged="AppGridView_SelectionChanged" Grid.Row="1" />
     </Grid>
 </Window>

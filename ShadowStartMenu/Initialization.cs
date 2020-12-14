@@ -3,14 +3,19 @@ using Serilog;
 using System.IO;
 using Serilog.Core;
 using Serilog.Events;
+using System.Drawing;
+using System.Windows;
+using System.Windows.Media;
 using ShadowStartMenu.Menu;
+using System.Windows.Interop;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 using Serilog.Sinks.SystemConsole.Themes;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ShadowStartMenu
 {
-    public class Initialization
+    public static class Initialization
     {
         public const string LOG_OUTPUT_FORMAT = "[{Timestamp:HH:mm:ss} | {Level:u3}] {LooseSource} {Message:lj}{NewLine}{Exception}";
 
@@ -33,6 +38,16 @@ namespace ShadowStartMenu
                     rollOnFileSizeLimit: true)
                 .WriteTo.Sink(provider.GetRequiredService<Log>())
                 .CreateLogger();
+        }
+
+        public static ImageSource ToImageSource(this Icon icon)
+        {
+            ImageSource imageSource = Imaging.CreateBitmapSourceFromHIcon(
+                icon.Handle,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
+
+            return imageSource;
         }
 
         public class LooseSourceEnricher : ILogEventEnricher
