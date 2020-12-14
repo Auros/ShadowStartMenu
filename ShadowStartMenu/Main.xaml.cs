@@ -16,6 +16,8 @@ namespace ShadowStartMenu
         private readonly IMenuSource _menuSource;
         private readonly ObservableCollection<AppCell> _cells = new ObservableCollection<AppCell>();
 
+        private AppCell? _activeAppCell;
+
         public Main(ILogger<Main> logger, IMenuSource menuSource)
         {
             _logger = logger;
@@ -23,9 +25,8 @@ namespace ShadowStartMenu
             _menuSource = menuSource;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             _logger.LogInformation("Initializing Window");
-
+            
             AppGridView.ItemsSource = _cells;
-
             foreach (var app in _menuSource.Apps)
             {
                 _cells.Add(new AppCell(app, IconFromFilePath(app.Path)));
@@ -33,7 +34,7 @@ namespace ShadowStartMenu
             TitleText.Text = "...";
         }
 
-        public static ImageSource IconFromFilePath(string filePath)
+        private static ImageSource IconFromFilePath(string filePath)
         {
             DIcon result = System.Drawing.SystemIcons.Application;
             try
@@ -44,19 +45,32 @@ namespace ShadowStartMenu
             return result.ToImageSource();
         }
 
-        private record AppCell(IApp App, ImageSource Icon);
-
         private void AppGridView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
             {
+                DeleteButton.Visibility = Visibility.Visible;
                 AppCell cell = (e.AddedItems[0] as AppCell)!;
                 TitleText.Text = cell.App.Name;
+                _activeAppCell = cell;
             }
             else
             {
+                DeleteButton.Visibility = Visibility.Hidden;
                 TitleText.Text = "...";
+                _activeAppCell = null;
             }
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_activeAppCell != null)
+            {
+                _menuSource.Remove(_activeAppCell.App);
+                _cells.Remove(_activeAppCell);
+            }
+        }
+
+        private record AppCell(IApp App, ImageSource Icon);
     }
 }
